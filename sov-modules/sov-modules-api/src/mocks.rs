@@ -2,11 +2,35 @@ use std::convert::Infallible;
 
 use crate::Context;
 use sov_state::{JmtStorage, ZkStorage};
+use sovereign_sdk::serial::{Decode, DecodeBorrowed, Encode};
 
 /// Mock for Context::PublicKey, useful for testing.
-#[derive(borsh::BorshDeserialize, borsh::BorshSerialize, PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct MockPublicKey {
     pub_key: Vec<u8>,
+}
+
+impl Encode for MockPublicKey {
+    fn encode(&self, target: &mut impl std::io::Write) {
+        self.pub_key.encode(target)
+    }
+}
+
+impl<'de> DecodeBorrowed<'de> for MockPublicKey {
+    type Error = anyhow::Error;
+
+    fn decode_from_slice(target: &'de [u8]) -> Result<Self, Self::Error> {
+        todo!()
+    }
+}
+
+impl Decode for MockPublicKey {
+    type Error = anyhow::Error;
+
+    fn decode<R: std::io::Read>(target: &mut R) -> Result<Self, <Self as Decode>::Error> {
+        let pub_key = Vec::<u8>::decode(target)?;
+        Ok(Self { pub_key })
+    }
 }
 
 impl MockPublicKey {

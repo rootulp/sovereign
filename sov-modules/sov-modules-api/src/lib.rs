@@ -21,7 +21,7 @@ pub enum NonInstantiable {}
 pub trait Context {
     type Storage: Storage + Clone;
 
-    type PublicKey: Decode + Encode + Eq + TryFrom<&'static str>;
+    type PublicKey: Decode<Error = anyhow::Error> + Encode + Eq + TryFrom<&'static str>;
 
     /// Sender of the transaction.
     fn sender(&self) -> &Self::PublicKey;
