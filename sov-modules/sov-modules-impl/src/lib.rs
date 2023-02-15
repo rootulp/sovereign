@@ -1,4 +1,5 @@
 use sov_modules_api::{Module, ModuleInfo};
+mod example_ballot;
 mod example_simple_module;
 
 pub struct Transaction<C: sov_modules_api::Context> {
